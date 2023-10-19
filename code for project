@@ -1,0 +1,45 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Specify the full path to your dataset file
+data_file = r'C:\Users\grk66\Downloads\projectdata.csv'
+
+try:
+    # Load the dataset
+    data = pd.read_csv(data_file)
+
+    # 1. Total Debt Owned to the World Bank
+    if 'Debt' in data:
+        total_debt = data['Debt'].sum()
+        print(f"Total debt owed to the World Bank: ${total_debt:,.2f}")
+    else:
+        print("Column 'Debt' not found in the dataset.")
+
+    # 2. Country with the Highest Debt
+    if 'Country' in data and 'Debt' in data:
+        highest_debt_country = data[data['Debt'] == data['Debt'].max()]
+        highest_debt_amount = highest_debt_country['Debt'].values[0]
+        highest_debt_country_name = highest_debt_country['Country'].values[0]
+        print(f"The country with the highest debt is {highest_debt_country_name} with a debt of ${highest_debt_amount:,.2f}")
+    else:
+        print("Columns 'Country' or 'Debt' not found in the dataset.")
+
+    # 3. Mean Debt by Debt Indication
+    if 'Debt' in data and 'Debt Indication' in data:
+        mean_debt_by_indicator = data.groupby('Debt Indication')['Debt'].mean()
+        print("Mean debt by debt indication:")
+        print(mean_debt_by_indicator)
+    else:
+        print("Columns 'Debt' or 'Debt Indication' not found in the dataset.")
+
+    # 4. Plot the Mean Debt by Debt Indication (Optional)
+    if 'Debt' in data and 'Debt Indication' in data:
+        mean_debt_by_indicator.plot(kind='bar', figsize=(10, 6))
+        plt.title("Mean Debt by Debt Indication")
+        plt.xlabel("Debt Indication")
+        plt.ylabel("Mean Debt")
+        plt.show()
+
+except Exception as e:
+    print(f"An error occurred: {str(e)}")
+
